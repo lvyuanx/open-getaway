@@ -1,0 +1,18 @@
+# Runtime certificates, private keys, and Certbot state
+nginx/letsencrypt/*
+!nginx/letsencrypt/.gitkeep
+
+# Local environment and Compose overrides
+.env
+.env.*
+!.env.example
+docker-compose.override.yaml
+
+# Local service configurations may contain deployment-specific domains.
+nginx/conf.d/*.conf
+!nginx/conf.d/service.conf.example
+
+# Editor and operating-system files
+.DS_Store
+.idea/
+.vscode/
