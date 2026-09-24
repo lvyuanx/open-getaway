@@ -73,6 +73,23 @@ The first domain is the certificate name. The resulting files are stored under
 `nginx/letsencrypt/live/<first-domain>/` and are available inside Nginx under
 `/etc/letsencrypt/live/<first-domain>/`.
 
+Manage the domains on an existing Certbot certificate with:
+
+```bash
+./scripts/issue-letsencrypt.sh --list
+./scripts/issue-letsencrypt.sh --add api.lvyx.cc
+./scripts/issue-letsencrypt.sh --del www.lvyx.cc
+```
+
+`--add` and `--del` reissue the selected certificate immediately. If there is
+more than one Certbot certificate, specify its certificate name with
+`--cert-name`, for example `--add api.lvyx.cc --cert-name lvyx.cc`. The first
+certificate domain is used as the name by default; `--cert-name` lets you
+select a specific certificate and preserves its existing file path. The
+existing Certbot account is used unless an optional `--email` is supplied.
+`--del` cannot remove the last domain from a certificate. Make sure a new
+domain's DNS points to this server before adding it.
+
 After copying the HTTPS `server` block from
 `nginx/conf.d/service.conf.example` into a real service config, check and reload
 Nginx:
