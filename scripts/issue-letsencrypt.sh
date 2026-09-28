@@ -253,9 +253,10 @@ parse_certificate_entries() {
             sub(/^.*Certificate Name:[[:space:]]*/, "", name)
             next
         }
-        /^[[:space:]]*Domains:/ && name != "" {
+        # Certbot uses `Domains` in older output and `Identifiers` in newer output.
+        /^[[:space:]]*(Domains|Identifiers):/ && name != "" {
             domains = $0
-            sub(/^.*Domains:[[:space:]]*/, "", domains)
+            sub(/^.*(Domains|Identifiers):[[:space:]]*/, "", domains)
             gsub(/,[[:space:]]*/, " ", domains)
             print name "|" domains
             name = ""
