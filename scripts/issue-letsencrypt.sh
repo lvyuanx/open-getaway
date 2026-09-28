@@ -240,8 +240,9 @@ prepare_environment() {
 }
 
 certbot_certificates() {
+    # Certbot creates /etc/letsencrypt/.certbot.lock even for `certificates`.
     docker run --rm \
-        -v "$LETSENCRYPT_DIR:/etc/letsencrypt:ro" \
+        -v "$LETSENCRYPT_DIR:/etc/letsencrypt:rw" \
         "$CERTBOT_IMAGE" certificates
 }
 
