@@ -47,6 +47,11 @@ These pages are only used by the default gateway response path. Proxied
 services keep control of their own response bodies unless their server block
 enables `proxy_intercept_errors`.
 
+Compose mounts `nginx/nginx.conf` and `nginx/html` read-only into the gateway,
+so configuration and page changes are available after recreating the gateway
+container without relying on an old image layer. The files must exist in the
+server checkout before running Compose.
+
 ## Request a Let's Encrypt certificate
 
 The repository provides `scripts/issue-letsencrypt.sh`. It uses the official
