@@ -1,5 +1,6 @@
 services:
   gateway:
+    container_name: open-getaway-port80
     build:
       context: .
       dockerfile: Dockerfile
