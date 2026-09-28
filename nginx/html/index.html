@@ -3,29 +3,58 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f3f2ec">
     <meta name="robots" content="noindex, nofollow">
-    <title>Open-Getaway | Gateway ready</title>
+    <title>Open-Getaway | Gateway online</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
 <div class="page">
     <header class="topbar">
-        <div class="brand"><span class="brand-mark">OG</span><span>OPEN-GETAWAY</span></div>
-        <span class="route">Default route / 200</span>
+        <a class="brand" href="/" aria-label="Open-Getaway home">
+            <span class="brand-mark" aria-hidden="true">OG</span>
+            <span>OPEN-GETAWAY</span>
+        </a>
+        <div class="topbar-status" aria-label="Gateway status">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span>Operational</span>
+            <span class="route">Default route / 200</span>
+        </div>
     </header>
 
     <main class="main">
         <section class="hero" aria-labelledby="page-title">
-            <div>
-                <p class="eyebrow">Edge gateway</p>
-                <h1 id="page-title">Traffic has a <em>clear way through.</em></h1>
-                <p class="lede">The Open-Getaway gateway is running and ready to route requests to configured services.</p>
-                <div class="signal"><span class="signal-dot" aria-hidden="true"></span>Gateway online</div>
+            <div class="hero-copy">
+                <p class="eyebrow">Default gateway response</p>
+                <h1 id="page-title">A clear path <em>through.</em></h1>
+                <p class="lede">Open-Getaway is online and ready to route requests to the services connected to this gateway.</p>
+                <a class="text-link" href="/healthz">View health check <span aria-hidden="true">-&gt;</span></a>
             </div>
-            <aside class="system-note">
-                <strong>Default landing page</strong>
-                <p>Replace this response by adding an active service configuration under <code>nginx/conf.d</code>.</p>
+
+            <aside class="system-card" aria-label="Gateway system status">
+                <p class="card-kicker">System state</p>
+                <p class="card-title"><span class="status-dot" aria-hidden="true"></span>Ready to route</p>
+                <dl class="metrics">
+                    <div class="metric-row">
+                        <dt>Gateway</dt>
+                        <dd>Online</dd>
+                    </div>
+                    <div class="metric-row">
+                        <dt>Mode</dt>
+                        <dd>Reverse proxy</dd>
+                    </div>
+                    <div class="metric-row">
+                        <dt>Routes</dt>
+                        <dd>Awaiting config</dd>
+                    </div>
+                </dl>
             </aside>
+        </section>
+
+        <section class="notice" aria-label="Configuration note">
+            <span class="notice-index" aria-hidden="true">01</span>
+            <p>Add an active service configuration to replace this default response.</p>
+            <code>nginx/conf.d/*.conf</code>
         </section>
     </main>
 

@@ -3,26 +3,40 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f3f2ec">
     <meta name="robots" content="noindex, nofollow">
     <title>404 | Route not found</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
-<body>
+<body class="page-status page-status--error">
 <div class="page">
     <header class="topbar">
-        <div class="brand"><span class="brand-mark">OG</span><span>OPEN-GETAWAY</span></div>
-        <span class="route">Gateway response / 404</span>
+        <a class="brand" href="/" aria-label="Open-Getaway home">
+            <span class="brand-mark" aria-hidden="true">OG</span>
+            <span>OPEN-GETAWAY</span>
+        </a>
+        <div class="topbar-status" aria-label="Gateway response">
+            <span>Route not found</span>
+            <span class="route">Gateway response / 404</span>
+        </div>
     </header>
 
     <main class="main error-main">
-        <section class="error-hero" aria-labelledby="page-title">
-            <p class="code" aria-label="Error 404">404</p>
-            <div>
-                <p class="eyebrow">Route not found</p>
+        <section class="error-layout" aria-labelledby="page-title">
+            <p class="error-code" aria-label="Error 404">404</p>
+
+            <div class="error-copy">
+                <p class="eyebrow">No matching route</p>
                 <h1 id="page-title">Nothing routes <em>here.</em></h1>
                 <p class="lede">The gateway is online, but this path does not match a configured service or resource.</p>
-                <a class="error-link" href="/">Return to gateway</a>
+                <a class="text-link" href="/">Return to gateway <span aria-hidden="true">-&gt;</span></a>
             </div>
+
+            <aside class="status-card status-card--error" aria-label="Request status">
+                <p class="card-kicker">Request status</p>
+                <p class="card-title"><span class="status-dot status-dot--error" aria-hidden="true"></span>Path not mapped</p>
+                <p class="card-copy">Check the address or return to the gateway entry point.</p>
+            </aside>
         </section>
     </main>
 

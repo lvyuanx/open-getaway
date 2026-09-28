@@ -3,26 +3,40 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f3f2ec">
     <meta name="robots" content="noindex, nofollow">
     <title>503 | Temporarily unavailable</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
-<body class="temporary">
+<body class="page-status page-status--temporary">
 <div class="page">
     <header class="topbar">
-        <div class="brand"><span class="brand-mark">OG</span><span>OPEN-GETAWAY</span></div>
-        <span class="route">Gateway response / 503</span>
+        <a class="brand" href="/" aria-label="Open-Getaway home">
+            <span class="brand-mark" aria-hidden="true">OG</span>
+            <span>OPEN-GETAWAY</span>
+        </a>
+        <div class="topbar-status" aria-label="Gateway response">
+            <span>Temporary interruption</span>
+            <span class="route">Gateway response / 503</span>
+        </div>
     </header>
 
     <main class="main error-main">
-        <section class="error-hero" aria-labelledby="page-title">
-            <p class="code" aria-label="Error 503">503</p>
-            <div>
+        <section class="error-layout" aria-labelledby="page-title">
+            <p class="error-code" aria-label="Error 503">503</p>
+
+            <div class="error-copy">
                 <p class="eyebrow">Service unavailable</p>
                 <h1 id="page-title">The route needs <em>a moment.</em></h1>
                 <p class="lede">The gateway is reachable, but the requested service is temporarily unavailable. Please try again shortly.</p>
-                <a class="error-link" href="/">Return to gateway</a>
+                <a class="text-link" href="/">Return to gateway <span aria-hidden="true">-&gt;</span></a>
             </div>
+
+            <aside class="status-card status-card--temporary" aria-label="Service status">
+                <p class="card-kicker">Service status</p>
+                <p class="card-title"><span class="status-dot status-dot--temporary" aria-hidden="true"></span>Temporarily paused</p>
+                <p class="card-copy">The gateway is still available. Retry the request when the upstream service is ready.</p>
+            </aside>
         </section>
     </main>
 
