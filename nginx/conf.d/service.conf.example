@@ -9,10 +9,26 @@
 # - The target process listens on 0.0.0.0, not only on 127.0.0.1.
 # - No host port mapping is required for gateway-to-service traffic.
 # - Every service uses a unique server_name.
+# - A certificate already exists for this hostname before this file is enabled.
+# - Replace <primary-domain> with the certificate name from
+#   scripts/issue-letsencrypt.sh. It is normally the first requested domain.
 
+# HTTP is redirect-only. The original path and query string are preserved.
 server {
     listen 80;
     server_name service.example.com;
+
+    return 308 https://$host$request_uri;
+}
+
+# HTTPS terminates TLS at the gateway and proxies to the child service.
+server {
+    listen 443 ssl;
+    server_name service.example.com;
+
+    ssl_certificate /etc/letsencrypt/live/<primary-domain>/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/<primary-domain>/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
 
     location / {
         # The variable form makes Docker DNS resolve at request time. This
@@ -25,7 +41,7 @@ server {
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Proto https;
 
         # Keep these headers when the service uses WebSocket or another
         # connection-upgrade protocol. The map is defined in nginx.conf.
@@ -34,52 +50,27 @@ server {
     }
 }
 
-# Path-based routing example:
+# Add path-based locations inside the HTTPS server block above when needed:
 #
-# location /orders/ {
-#     set $order_upstream http://order-api:8080;
-#     rewrite ^/orders/(.*)$ /$1 break;
-#     proxy_pass $order_upstream;
-# }
+#     location /orders/ {
+#         set $order_upstream http://order-api:8080;
+#         rewrite ^/orders/(.*)$ /$1 break;
+#         proxy_pass $order_upstream;
+#     }
 #
 # The rewrite above makes /orders/users become /users while retaining dynamic
 # Docker DNS resolution. If the service is guaranteed to exist when Nginx
 # starts, the equivalent static forms are:
 #
-# location /orders/ {
-#     # With the trailing slash, /orders/users becomes /users.
-#     proxy_pass http://order-api:8080/;
-# }
+#     location /orders/ {
+#         # With the trailing slash, /orders/users becomes /users.
+#         proxy_pass http://order-api:8080/;
+#     }
 #
-# location /orders/ {
-#     # Without the trailing slash, Nginx forwards the original URI.
-#     proxy_pass http://order-api:8080;
-# }
+#     location /orders/ {
+#         # Without the trailing slash, Nginx forwards the original URI.
+#         proxy_pass http://order-api:8080;
+#     }
 #
 # Static files and SPA history fallback should be configured by the frontend
 # container. The gateway only forwards the request to that container.
-
-# Optional HTTPS server block after obtaining a certificate with
-# scripts/issue-letsencrypt.sh. Replace <primary-domain> with the first domain
-# passed to the certificate script, for example lvyx.cc.
-#
-# server {
-#     listen 443 ssl;
-#     server_name service.example.com;
-#
-#     ssl_certificate /etc/letsencrypt/live/<primary-domain>/fullchain.pem;
-#     ssl_certificate_key /etc/letsencrypt/live/<primary-domain>/privkey.pem;
-#     ssl_protocols TLSv1.2 TLSv1.3;
-#
-#     location / {
-#         set $service_upstream http://<service-name>:<container-port>;
-#         proxy_pass $service_upstream;
-#         proxy_http_version 1.1;
-#         proxy_set_header Host $host;
-#         proxy_set_header X-Real-IP $remote_addr;
-#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-#         proxy_set_header X-Forwarded-Proto https;
-#         proxy_set_header Upgrade $http_upgrade;
-#         proxy_set_header Connection $connection_upgrade;
-#     }
-# }

@@ -105,9 +105,10 @@ existing Certbot account is used unless an optional `--email` is supplied.
 `--del` cannot remove the last domain from a certificate. Make sure a new
 domain's DNS points to this server before adding it.
 
-After copying the HTTPS `server` block from
-`nginx/conf.d/service.conf.example` into a real service config, check and reload
-Nginx:
+After the certificate has been issued, copy the complete service template into
+a real service config, replace `<primary-domain>` with the certificate name,
+and check and reload Nginx. The template redirects HTTP requests to HTTPS and
+proxies HTTPS requests to the child service:
 
 ```bash
 docker compose exec gateway nginx -t
@@ -138,27 +139,14 @@ Edit `order-api.conf` and replace:
 - `service.example.com` with the public hostname;
 - `<service-name>` with the child Compose service name;
 - `<container-port>` with the port listened to inside that container.
+- `<primary-domain>` with the Certbot certificate name, normally the first
+  domain passed to `scripts/issue-letsencrypt.sh`.
 
-For example, a service named `order-api` listening on port `8080` can be
-exposed as `api.example.com` with:
-
-```nginx
-server {
-    listen 80;
-    server_name api.example.com;
-
-    location / {
-        set $order_api_upstream http://order-api:8080;
-        proxy_pass $order_api_upstream;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection $connection_upgrade;
-    }
-}
-```
+For example, after replacing the placeholders, a service named `order-api`
+listening on port `8080` is exposed as `api.example.com`; requests to
+`http://api.example.com/orders` are redirected to
+`https://api.example.com/orders` and the HTTPS request is proxied to the
+service.
 
 The variable form of `proxy_pass` uses Docker's embedded DNS resolver at
 request time. The child container can start after the gateway, and replacing a
