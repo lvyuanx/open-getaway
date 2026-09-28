@@ -37,6 +37,16 @@ The `443` port is reserved. Certificates are mounted read-only from
 `nginx/letsencrypt` to `/etc/letsencrypt` inside the gateway. Add an HTTPS
 `server` block before enabling TLS in a real environment.
 
+The default server includes built-in static pages from `nginx/html`:
+
+- `/` serves the gateway index page;
+- unmatched paths use the custom `404` page;
+- Nginx-generated `503` responses use the custom service-unavailable page.
+
+These pages are only used by the default gateway response path. Proxied
+services keep control of their own response bodies unless their server block
+enables `proxy_intercept_errors`.
+
 ## Request a Let's Encrypt certificate
 
 The repository provides `scripts/issue-letsencrypt.sh`. It uses the official
